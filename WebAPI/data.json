@@ -3,15 +3,34 @@
     {
       "Id": 0,
       "UserName": "Miro",
-      "Password": "Miro123"
+      "Password": "123"
     },
     {
       "Id": 1,
-      "UserName": "Eto",
-      "Password": "Eti\u0107"
+      "UserName": "Daro",
+      "Password": "321"
     }
   ],
-  "SubForums": [],
+  "SubForums": [
+    {
+      "Id": 0,
+      "CreatedBy": {
+        "Id": 0,
+        "UserName": "Miro",
+        "Password": "123"
+      },
+      "Type": "Cats"
+    },
+    {
+      "Id": 1,
+      "CreatedBy": {
+        "Id": 0,
+        "UserName": "Miro",
+        "Password": "123"
+      },
+      "Type": "Dogs"
+    }
+  ],
   "Posts": [],
   "Comments": []
 }
