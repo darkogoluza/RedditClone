@@ -80,4 +80,20 @@ public class SubForumFileDao : ISubForumDao
 
         return Task.FromResult(toGet);
     }
+
+    public Task UpdateAsync(SubForum updated)
+    {
+        foreach (var subForum in context.SubForums)
+        {
+            if (subForum.Id == updated.Id)
+            {
+                context.SubForums.Remove(subForum);
+                context.SubForums.Add(updated);
+                context.SaveChanges();
+                break;
+            }
+        }
+        
+        return Task.CompletedTask;
+    }
 }

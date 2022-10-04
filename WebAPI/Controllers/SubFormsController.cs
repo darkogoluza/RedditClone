@@ -46,6 +46,33 @@ public class SubFormsController : ControllerBase
         }
     }
     
-    // Update type
-    // delete
+    [HttpPatch]
+    public async Task<ActionResult> UpdateAsync([FromBody] SubForumUpdateDto subForumUpdateDto)
+    {
+        try
+        {
+            await subForumLogic.UpdateAsync(subForumUpdateDto);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult> DeleteAsync([FromQuery] int id)
+    {
+        try
+        {
+            await subForumLogic.DeleteAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

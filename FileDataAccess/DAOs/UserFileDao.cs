@@ -67,4 +67,20 @@ public class UserFileDao : IUserDao
 
         return Task.CompletedTask;
     }
+
+    public Task UpdateAsync(User updated)
+    {
+        foreach (var user in context.Users)
+        {
+            if (user.Id == updated.Id)
+            {
+                context.Users.Remove(user);
+                context.Users.Add(updated);
+                context.SaveChanges();
+                break;
+            }
+        }
+
+        return Task.CompletedTask;
+    }
 }

@@ -10,4 +10,5 @@ public interface ISubForumDao
     Task DeleteAsync(int id);
     Task<SubForum?> GetByTypeAsync(string type);
     Task<SubForum?> GetByIdAsync(int belongsToId);
+    Task UpdateAsync(SubForum updated);
 }

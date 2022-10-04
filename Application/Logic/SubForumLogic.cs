@@ -36,4 +36,27 @@ public class SubForumLogic : ISubForumLogic
     {
         return await subForumDao.GetAsync();
     }
+
+    public async Task DeleteAsync(int id)
+    {
+        SubForum? exists = await subForumDao.GetByIdAsync(id);
+        if (exists == null)
+            throw new Exception($"Sub forum with type {id} does not exist");
+
+        await subForumDao.DeleteAsync(id);
+    }
+
+    public async Task UpdateAsync(SubForumUpdateDto subForumUpdateDto)
+    {
+        SubForum? exists = await subForumDao.GetByIdAsync(subForumUpdateDto.Id);
+        if (exists == null)
+            throw new Exception($"Sub forum with type {subForumUpdateDto.Id} does not exist");
+
+        SubForum updated = new(exists.CreatedBy, subForumUpdateDto.Type)
+        {
+            Id = exists.Id
+        };
+
+        await subForumDao.UpdateAsync(updated);
+    }
 }

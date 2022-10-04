@@ -46,6 +46,34 @@ public class UsersController : ControllerBase
         }
     }
     
-    // update username
-    // delete
+    
+    [HttpPatch]
+    public async Task<ActionResult> UpdateAsync([FromBody] UserUpdateDto updateDto)
+    {
+        try
+        {
+            await userLogic.UpdateAsync(updateDto);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        } 
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult> DeleteAsync([FromQuery] int id)
+    {
+        try
+        {
+            await userLogic.DeleteAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
