@@ -2,18 +2,18 @@
 
 public class Comment
 {
-    public int Id { get; }
+    public int Id { get; set; }
     public User WrittenBy { get; }
-    public Post PostedOn { get; }
+    public int PostedOn { get; }
     public string Body { get; set; }
-    public List<Comment> SubComments { get; }
+    public int? ParentCommentId { get; }
 
-    public Comment(int id, User writtenBy, Post postedOn, string body)
+    public Comment(User writtenBy, int postedOn, string body, int? parentCommentId)
     {
-        Id = id;
         WrittenBy = writtenBy;
         Body = body;
-        SubComments = new List<Comment>();
+        ParentCommentId = parentCommentId;
         PostedOn = postedOn;
     }
+    
 }

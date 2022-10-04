@@ -20,6 +20,8 @@ builder.Services.AddScoped<ISubForumDao, SubForumFileDao>();
 builder.Services.AddScoped<ISubForumLogic, SubForumLogic>();
 builder.Services.AddScoped<IPostDao, PostFileDao>();
 builder.Services.AddScoped<IPostLogic, PostLogic>();
+builder.Services.AddScoped<ICommentDao, CommentFileDao>();
+builder.Services.AddScoped<ICommentLogic, CommentLogic>();
 
 var app = builder.Build();
 

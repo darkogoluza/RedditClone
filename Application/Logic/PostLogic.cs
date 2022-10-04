@@ -46,8 +46,8 @@ public class PostLogic : IPostLogic
         {
             throw new Exception($"Post with Id {id} does not exist");
         }
-        
-        return await postDao.GetByIdAsync(id);
+
+        return existing;
     }
 
     public async Task UpdateAsync(PostUpdateDto postUpdateDto)
