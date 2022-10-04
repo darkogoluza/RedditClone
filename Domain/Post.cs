@@ -2,18 +2,17 @@
 
 public class Post
 {
-    public int Id { get; }
+    public int Id { get; set; }
     public User Owner { get; }
     public SubForum BelongsTo { get; }
     public string Title { get; set; }
-    public string Password { get; set; }
+    public string Body { get; set; }
 
-    public Post(int id, User owner, SubForum belongsTo, string title, string password)
+    public Post(User owner, SubForum belongsTo, string title, string body)
     {
-        Id = id;
         Owner = owner;
         Title = title;
-        Password = password;
+        Body = body;
         BelongsTo = belongsTo;
     }
 }

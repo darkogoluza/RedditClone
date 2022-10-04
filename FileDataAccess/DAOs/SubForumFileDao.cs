@@ -43,6 +43,7 @@ public class SubForumFileDao : ISubForumDao
             if (subForum.Id == id)
             {
                 context.SubForums.Remove(subForum);
+                context.SaveChanges();
                 break;
             }
         }
@@ -52,16 +53,31 @@ public class SubForumFileDao : ISubForumDao
 
     public Task<SubForum?> GetByTypeAsync(string type)
     {
-        SubForum ToGet = null;
+        SubForum? toGet = null;
         foreach (var subForum in context.SubForums)
         {
             if (subForum.Type == type)
             {
-                ToGet = subForum;
+                toGet = subForum;
                 break;
             }
         }
 
-        return Task.FromResult(ToGet);
+        return Task.FromResult(toGet);
+    }
+
+    public Task<SubForum?> GetByIdAsync(int id)
+    {  
+        SubForum? toGet = null;
+        foreach (var subForum in context.SubForums)
+        {
+            if (subForum.Id == id)
+            {
+                toGet = subForum;
+                break;
+            }
+        }
+
+        return Task.FromResult(toGet);
     }
 }

@@ -9,4 +9,5 @@ public interface ISubForumDao
     Task<IEnumerable<SubForum>> GetAsync();
     Task DeleteAsync(int id);
     Task<SubForum?> GetByTypeAsync(string type);
+    Task<SubForum?> GetByIdAsync(int belongsToId);
 }

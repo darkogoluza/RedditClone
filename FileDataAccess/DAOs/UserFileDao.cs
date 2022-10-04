@@ -60,6 +60,7 @@ public class UserFileDao : IUserDao
             if (user.Id == id)
             {
                 context.Users.Remove(user);
+                context.SaveChanges();
                 break;
             }
         }
