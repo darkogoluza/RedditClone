@@ -9,12 +9,17 @@
         <li>
             <NavLink ActiveClass="text-slate-900 font-bold" class="hover:text-blue-500" href="Register">Register</NavLink>
         </li>
-        <li>
-            <NavLink ActiveClass="text-slate-900 font-bold" class="hover:text-blue-500" href="CreatePost">Create Post</NavLink>
-        </li>
-        <li>
-            <NavLink ActiveClass="text-slate-900 font-bold" class="hover:text-blue-500" href="CreateSubForm">Create Sub Form</NavLink>
-        </li>
+        <AuthorizeView>
+            <Authorized>
+                <li>
+                    <NavLink ActiveClass="text-slate-900 font-bold" class="hover:text-blue-500" href="CreatePost">Create Post</NavLink>
+                </li>
+                <li>
+                    <NavLink ActiveClass="text-slate-900 font-bold" class="hover:text-blue-500" href="CreateSubForm">Create Sub Form</NavLink>
+                </li>
+            </Authorized>
+        </AuthorizeView>
+
     </nav>
 </header>
 
