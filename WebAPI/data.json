@@ -20,6 +20,15 @@
         "Password": "123"
       },
       "Type": "Cats"
+    },
+    {
+      "Id": 1,
+      "CreatedBy": {
+        "Id": 1,
+        "UserName": "Mirko",
+        "Password": "123"
+      },
+      "Type": "Dogs"
     }
   ],
   "Posts": [
@@ -41,6 +50,25 @@
       },
       "Title": "My Cat",
       "Body": "Look at my Cat"
+    },
+    {
+      "Id": 1,
+      "Owner": {
+        "Id": 1,
+        "UserName": "Mirko",
+        "Password": "123"
+      },
+      "BelongsTo": {
+        "Id": 1,
+        "CreatedBy": {
+          "Id": 1,
+          "UserName": "Mirko",
+          "Password": "123"
+        },
+        "Type": "Dogs"
+      },
+      "Title": "some shit",
+      "Body": "Ettttt"
     }
   ],
   "Comments": [

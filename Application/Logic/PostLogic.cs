@@ -34,9 +34,9 @@ public class PostLogic : IPostLogic
         return await postDao.CreateAsync(post);
     }
 
-    public async Task<IEnumerable<Post>> GetAsync()
+    public async Task<IEnumerable<Post>> GetAsync(string? subForm)
     {
-        return await postDao.GetAsync();
+        return await postDao.GetAsync(subForm);
     }
 
     public async Task<Post?> GetByIdAsync(int id)

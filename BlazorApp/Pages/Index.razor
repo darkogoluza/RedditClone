@@ -1,9 +1,46 @@
 ﻿@page "/"
+@using Domain
+@using HttpClients.ClientInterfaces
+@inject ISubFormService subFormService
+@inject NavigationManager navMgr
 
 <PageTitle>Index</PageTitle>
 
-<div >
-    <header>
-        <nav></nav>
-    </header>
+<div class="space-y-8">
+    <h1 class="text-5xl text-blue-500">Sub Forms</h1>
+
+    @if (subForums == null)
+    {
+        <p class="text-slate-500">Loading...</p>
+    }
+    else if (!subForums.Any())
+    {
+        <p class="text-slate-500">There is no sub forms!</p>
+    }
+    else
+    {
+        <ol>
+            @foreach (SubForum subForm in subForums)
+            {
+                <p @onclick="@(() => navMgr.NavigateTo("/SubForm/?Type="+subForm.Type))" class="text-slate-900 hover:text-blue-500 cursor-pointer">r/@subForm.Type, created by: [@subForm.CreatedBy.UserName]</p>
+            }
+        </ol>
+    }
 </div>
+
+@code {
+    public IEnumerable<SubForum>? subForums;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            subForums = await subFormService.GetAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+}

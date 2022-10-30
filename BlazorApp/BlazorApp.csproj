@@ -12,12 +12,18 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Shared" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css.map" />
+      <_ContentIncludedByDefault Remove="UIComponents\Header.razor" />
+      <_ContentIncludedByDefault Remove="UIComponents\Test.razor" />
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css.map" />
+      <ProjectReference Include="..\HttpClients\HttpClients.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\UIComponents" />
     </ItemGroup>
 
 </Project>

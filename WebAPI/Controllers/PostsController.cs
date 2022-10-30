@@ -33,11 +33,11 @@ public class PostsController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Post>>> GetAsync()
+    public async Task<ActionResult<IEnumerable<Post>>> GetAsync([FromQuery] string? subForm)
     {
         try
         {
-            IEnumerable<Post> posts = await postLogic.GetAsync();
+            IEnumerable<Post> posts = await postLogic.GetAsync(subForm);
             return Ok(posts);
         }
         catch (Exception e)

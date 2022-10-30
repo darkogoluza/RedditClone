@@ -1,0 +1,48 @@
+﻿@page "/SubForm"
+@using HttpClients.ClientInterfaces
+@using Domain
+@inject IPostService postService
+@inject NavigationManager navMgr
+
+<div class="space-y-8">
+    <h1 class="text-5xl text-blue-500">Posts</h1>
+
+    @if (posts == null)
+    {
+        <p class="text-slate-500">Loading...</p>
+    }
+    else if (!posts.Any())
+    {
+        <p class="text-slate-500">There is no sub forms!</p>
+    }
+    else
+    {
+        <ol>
+            @foreach (Post post in posts)
+            {
+                <p>@post.Title</p>
+            }
+        </ol>
+    }
+</div>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Type { get; set; }
+    
+    private IEnumerable<Post>? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            posts = await postService.GetAsync(Type);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+}

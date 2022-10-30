@@ -28,9 +28,15 @@ public class PostFileDao : IPostDao
         return Task.FromResult(post);
     }
 
-    public Task<IEnumerable<Post>> GetAsync()
+    public Task<IEnumerable<Post>> GetAsync(string? subForm)
     {
         IEnumerable<Post> posts = context.Posts.AsEnumerable();
+
+        if (subForm != null)
+        {
+            posts = posts.Where(post => post.BelongsTo.Type.Equals(subForm));
+        }
+
         return Task.FromResult(posts);
     }
 
