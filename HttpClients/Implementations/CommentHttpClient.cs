@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using Domain;
+using Domain.DTOs;
 using HttpClients.ClientInterfaces;
 
 namespace HttpClients.Implementations;
@@ -44,5 +46,21 @@ public class CommentHttpClient : ICommentService
         });
 
         return comments;
+    }
+
+    public async Task PublishAsync(string body, int ownerId, int? commentId, int postId)
+    {
+        CommentCreationDto commentCreationDto = new(ownerId, postId,body, commentId);
+
+        string subFormAsJson = JsonSerializer.Serialize(commentCreationDto);
+        StringContent content = new(subFormAsJson, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await client.PostAsync("https://localhost:7207/Comments", content);
+        string responseContent = await response.Content.ReadAsStringAsync();
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(responseContent);
+        }
     }
 }

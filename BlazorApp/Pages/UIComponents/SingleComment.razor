@@ -1,11 +1,34 @@
 ﻿@using Domain
 @using HttpClients.ClientInterfaces
+@using System.Security.Claims
 @namespace UIComponents
 @inject ICommentService commentService
+@inject IAuthService authService
+@inject NavigationManager navMgr
 
 <div>
     <p class="text-slate-600 text-sm">Commented by: @Comment.WrittenBy.UserName</p>
     <p>@Comment.Body</p>
+    <AuthorizeView>
+        <Authorized>
+            @if (commentInput)
+            {
+                <button @onclick="@(() => commentInput = !commentInput)" class="text-slate-400 text-sm hover:text-blue-500">close</button>
+            }
+            else
+            {
+                <button @onclick="@(() => commentInput = !commentInput)" class="text-slate-400 text-sm hover:text-blue-500">replay</button>
+            }
+            @if (commentInput)
+            {
+                <div class="flex space-x-2">
+                    <input class="rounded-md bg-slate-100 px-2 py-1 w-full" type="text" @bind="commentInputText"/>
+                    <button @onclick="Publish" class="px-2 py-1 bg-blue-500 text-blue-100 rounded-xl hover:bg-blue-400">publish</button>
+                </div>
+            }
+        </Authorized>
+    </AuthorizeView>
+
     <ol class="pl-4 space-y-4 relative">
         <div class="w-1 h-full absolute left-0 bg-slate-300 rounded-full"> </div>
         @if (subComments.Any())
@@ -25,9 +48,41 @@
     [Parameter]
     public Comment Comment { get; set; }
 
-    private ICollection<Comment> subComments;
+    [Parameter]
+    public int PostId { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    private ICollection<Comment> subComments;
+    private bool commentInput = false;
+    private string commentInputText = "";
+
+    private async void Publish()
+    {
+        if (string.IsNullOrEmpty(commentInputText))
+        {
+            return;
+        }
+        
+        try
+        {
+            ClaimsPrincipal context = await authService.GetAuthAsync();
+            var claims = context.Identities.First().Claims.ToList();
+            string? ownerId = claims?.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+            await commentService.PublishAsync(commentInputText, int.Parse(ownerId), Comment.Id, PostId);
+
+            await Load();
+
+            commentInput = false;
+            commentInputText = "";
+            
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    private async Task Load()
     {
         subComments = new List<Comment>();
         try
@@ -38,6 +93,11 @@
         {
             Console.WriteLine(e);
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
     }
 
 }

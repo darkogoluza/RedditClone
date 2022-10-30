@@ -263,6 +263,72 @@
       "PostedOn": 0,
       "Body": "another sub comment",
       "ParentCommentId": 0
+    },
+    {
+      "Id": 6,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 0,
+      "Body": "Thank you mate",
+      "ParentCommentId": 4
+    },
+    {
+      "Id": 7,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 1,
+      "Body": "Nice dog",
+      "ParentCommentId": null
+    },
+    {
+      "Id": 8,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 1,
+      "Body": "Where did you get it?",
+      "ParentCommentId": null
+    },
+    {
+      "Id": 9,
+      "WrittenBy": {
+        "Id": 1,
+        "UserName": "Mirko",
+        "Password": "123"
+      },
+      "PostedOn": 1,
+      "Body": "Thank you mate!",
+      "ParentCommentId": 7
+    },
+    {
+      "Id": 10,
+      "WrittenBy": {
+        "Id": 1,
+        "UserName": "Mirko",
+        "Password": "123"
+      },
+      "PostedOn": 1,
+      "Body": "On e-bay hahah",
+      "ParentCommentId": 8
+    },
+    {
+      "Id": 11,
+      "WrittenBy": {
+        "Id": 2,
+        "UserName": "Filip",
+        "Password": "4321"
+      },
+      "PostedOn": 0,
+      "Body": "Wtf man?",
+      "ParentCommentId": 10
     }
   ]
 }

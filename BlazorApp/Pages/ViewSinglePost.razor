@@ -2,8 +2,10 @@
 @using Domain
 @using UIComponents
 @using HttpClients.ClientInterfaces
+@using System.Security.Claims
 @inject IPostService postService
 @inject ICommentService commentService
+@inject IAuthService authService
 
 @if (post == null)
 {
@@ -17,25 +19,30 @@ else
             <h2 class="text-slate-900 text-2xl font-bold">@post.Title</h2>
             <p class="text-slate-700">@post.Body</p>
         </div>
+
+        <AuthorizeView>
+            <Authorized>
+                <div class="flex space-x-2 items-center">
+                    <p>comment: </p>
+                    <input class="rounded-md bg-slate-100 px-2 py-1 w-full" type="text" @bind="commentInputText"/>
+                    <button @onclick="Publish" class="px-2 py-1 bg-blue-500 text-blue-100 rounded-xl hover:bg-blue-400">publish</button>
+                </div>
+
+            </Authorized>
+        </AuthorizeView>
+
         @if (comments.Any())
         {
-            <div>
-                <p>Comments:</p>
-                <ol class="space-y-6">
-                    @foreach (var comment in comments)
-                    {
-                        <li>
-                            <SingleComment Comment="@comment"/>
-                        </li>
-                    }
-                </ol>
-            </div> 
+            <ol class="space-y-6">
+                @foreach (var comment in comments)
+                {
+                    <li>
+                        <SingleComment Comment="@comment" postId="@post.Id"/>
+                    </li>
+                }
+            </ol>
         }
-        else
-        {
-            <p>No comments</p>
-        }
-       
+
     </article>
 }
 
@@ -46,6 +53,34 @@ else
 
     private Post? post;
     private ICollection<Comment> comments;
+
+    private string commentInputText = "";
+
+    private async void Publish()
+    {
+        if (string.IsNullOrEmpty(commentInputText))
+        {
+            return;
+        }
+        
+        try
+        {
+            ClaimsPrincipal context = await authService.GetAuthAsync();
+            var claims = context.Identities.First().Claims.ToList();
+            string? ownerId = claims?.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+            await commentService.PublishAsync(commentInputText, int.Parse(ownerId), null, post.Id);
+
+            comments = await commentService.GetAllCommentsFromAPostAsync(Id);
+
+            commentInputText = "";
+            
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,4 +94,5 @@ else
             Console.WriteLine(e);
         }
     }
+
 }
