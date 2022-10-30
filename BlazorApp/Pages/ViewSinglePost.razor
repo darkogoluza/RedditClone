@@ -1,7 +1,62 @@
-﻿@page "/ViewSinglePost"
+﻿@page "/ViewSinglePost/{Id:int}"
+@using Domain
+@using UIComponents
+@using HttpClients.ClientInterfaces
+@inject IPostService postService
+@inject ICommentService commentService
 
-    <h3>ViewSinglePost</h3>
+@if (post == null)
+{
+    <p class="text-slate-500">Loading...</p>
+}
+else
+{
+    <article class="bg-slate-200 space-y-8 rounded-xl drop-shadow-sm max-w-xl mx-auto p-4">
+        <p class="text-slate-600">r/@post.BelongsTo.Type, created by: [@post.Owner.UserName]</p>
+        <div class="space-y-4">
+            <h2 class="text-slate-900 text-2xl font-bold">@post.Title</h2>
+            <p class="text-slate-700">@post.Body</p>
+        </div>
+        @if (comments.Any())
+        {
+            <div>
+                <p>Comments:</p>
+                <ol class="space-y-6">
+                    @foreach (var comment in comments)
+                    {
+                        <li>
+                            <SingleComment Comment="@comment"/>
+                        </li>
+                    }
+                </ol>
+            </div> 
+        }
+        else
+        {
+            <p>No comments</p>
+        }
+       
+    </article>
+}
 
 @code {
-    
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private Post? post;
+    private ICollection<Comment> comments;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            post = await postService.GetByIdAsync(Id);
+            comments = await commentService.GetAllCommentsFromAPostAsync(Id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
 }

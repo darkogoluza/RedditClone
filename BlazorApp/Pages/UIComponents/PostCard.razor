@@ -1,0 +1,21 @@
+﻿@using Domain
+@using Application.Logic
+@namespace UIComponents
+@inject NavigationManager navMgr
+
+<article
+    @onclick="@(() => navMgr.NavigateTo("ViewSinglePost/" + Post.Id))"
+    class="bg-slate-200 space-y-8 rounded-xl drop-shadow-sm max-w-xl mx-auto p-4 cursor-pointer">
+    <p class="text-slate-600">r/@Post.BelongsTo.Type, created by: [@Post.Owner.UserName]</p>
+    <div class="space-y-4">
+        <h2 class="text-slate-900 text-2xl font-bold" >@Post.Title</h2>
+        <p class="text-slate-700">@Post.Body</p>
+    </div>
+</article>
+
+@code {
+
+    [Parameter]
+    public Post Post { get; set; }
+
+}

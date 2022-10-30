@@ -1,11 +1,12 @@
 ﻿@page "/SubForm"
 @using HttpClients.ClientInterfaces
 @using Domain
+@using UIComponents
 @inject IPostService postService
 @inject NavigationManager navMgr
 
 <div class="space-y-8">
-    <h1 class="text-5xl text-blue-500">Posts</h1>
+    <h1 class="text-5xl text-blue-500 focus:outline-none">r/@Type Posts</h1>
 
     @if (posts == null)
     {
@@ -13,14 +14,14 @@
     }
     else if (!posts.Any())
     {
-        <p class="text-slate-500">There is no sub forms!</p>
+        <p class="text-slate-500">There is no posts!</p>
     }
     else
     {
-        <ol>
-            @foreach (Post post in posts)
+        <ol class="space-y-4">
+            @foreach (var post in posts)
             {
-                <p>@post.Title</p>
+                <PostCard Post="@post"/>
             }
         </ol>
     }
@@ -44,5 +45,4 @@
             Console.WriteLine(e);
         }
     }
-
 }

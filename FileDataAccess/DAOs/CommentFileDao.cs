@@ -29,9 +29,23 @@ public class CommentFileDao : ICommentDao
         return comment;
     }
 
-    public Task<IEnumerable<Comment>> GetAsync()
+    public Task<IEnumerable<Comment>> GetAsync(int? postId)
     {
         IEnumerable<Comment> comments = context.Comments.AsEnumerable();
+
+        if (postId != null)
+        {
+            comments = comments.Where(comment => comment.PostedOn == postId);
+            comments = comments.Where(comment => comment.ParentCommentId == null);
+        }
+        
+        return Task.FromResult(comments);
+    }
+    
+    public Task<IEnumerable<Comment>> GetSubCommentsAsync(int id)
+    {
+        IEnumerable<Comment> comments = context.Comments.AsEnumerable();
+        comments = comments.Where(comment => comment.ParentCommentId == id);
         return Task.FromResult(comments);
     }
 

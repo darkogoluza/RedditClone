@@ -40,9 +40,9 @@ public class CommentLogic : ICommentLogic
         return await commentDao.CreateAsync(comment);
     }
 
-    public async Task<IEnumerable<Comment>> GetAsync()
+    public async Task<IEnumerable<Comment>> GetAsync(int? postId)
     {
-        return await commentDao.GetAsync();
+        return await commentDao.GetAsync(postId);
     }
 
     public async Task<Comment?> GetByIdAsync(int id)
@@ -103,5 +103,10 @@ public class CommentLogic : ICommentLogic
             throw new Exception($"Comment with the id {id} does not exist.");
 
         await commentDao.DeleteAsync(id);
+    }
+
+    public async Task<IEnumerable<Comment>> GetSubCommentsAsync(int id)
+    {
+        return await commentDao.GetSubCommentsAsync(id);
     }
 }

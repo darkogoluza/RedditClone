@@ -32,11 +32,28 @@ public class CommentsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Comment>>> GetAsync()
+    public async Task<ActionResult<IEnumerable<Comment>>> GetAsync([FromQuery] int? postId)
     {
         try
         {
-            IEnumerable<Comment> comments = await commentLogic.GetAsync();
+            IEnumerable<Comment> comments = await commentLogic.GetAsync(postId);
+            return Ok(comments);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpGet]
+    [Route("/SubComments/")]
+
+    public async Task<ActionResult<IEnumerable<Comment>>> GetSubCommentsAsync([FromQuery] int id)
+    {
+        try
+        {
+            IEnumerable<Comment> comments = await commentLogic.GetSubCommentsAsync(id);
             return Ok(comments);
         }
         catch (Exception e)

@@ -69,6 +69,63 @@
       },
       "Title": "some shit",
       "Body": "Ettttt"
+    },
+    {
+      "Id": 2,
+      "Owner": {
+        "Id": 1,
+        "UserName": "Mirko",
+        "Password": "123"
+      },
+      "BelongsTo": {
+        "Id": 0,
+        "CreatedBy": {
+          "Id": 0,
+          "UserName": "Darko",
+          "Password": "123"
+        },
+        "Type": "Cats"
+      },
+      "Title": "Halloween Cat Contest",
+      "Body": "Reddit site admins will soon add the ability for people to add images and user created gifs directly in comments. It will function similarly to the already existing ability to add gifs by Giphy."
+    },
+    {
+      "Id": 3,
+      "Owner": {
+        "Id": 1,
+        "UserName": "Mirko",
+        "Password": "123"
+      },
+      "BelongsTo": {
+        "Id": 0,
+        "CreatedBy": {
+          "Id": 0,
+          "UserName": "Darko",
+          "Password": "123"
+        },
+        "Type": "Cats"
+      },
+      "Title": "Announcement: \u0027Name my cat/kitten\u0027 submissions now require verification",
+      "Body": "Those of you who frequent \u0027new\u0027 on r/cats will remember the t-shirt/poster/merch spam campaign that used to frequently end up in our feed - It was highly disruptive for our community, as well as for our mod team. Through tireless work, patience, and determination - I developed a bot, u/SpamBustr, which has completely eliminated their success on our sub, among many others to date."
+    },
+    {
+      "Id": 4,
+      "Owner": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "BelongsTo": {
+        "Id": 0,
+        "CreatedBy": {
+          "Id": 0,
+          "UserName": "Darko",
+          "Password": "123"
+        },
+        "Type": "Cats"
+      },
+      "Title": "Announcement: \u0027Name my cat/kitten\u0027 submissions now require verification",
+      "Body": "Those of you who frequent \u0027new\u0027 on r/cats will remember the t-shirt/poster/merch spam campaign that used to frequently end up in our feed - It was highly disruptive for our community, as well as for our mod team. Through tireless work, patience, and determination - I developed a bot, u/SpamBustr, which has completely eliminated their success on our sub, among many others to date."
     }
   ],
   "Comments": [
@@ -93,6 +150,39 @@
       "PostedOn": 0,
       "Body": "Test",
       "ParentCommentId": null
+    },
+    {
+      "Id": 3,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 0,
+      "Body": "Thank you mate!",
+      "ParentCommentId": 0
+    },
+    {
+      "Id": 4,
+      "WrittenBy": {
+        "Id": 1,
+        "UserName": "Mirko",
+        "Password": "123"
+      },
+      "PostedOn": 0,
+      "Body": ":)",
+      "ParentCommentId": 3
+    },
+    {
+      "Id": 5,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 0,
+      "Body": "another sub comment",
+      "ParentCommentId": 0
     }
   ]
 }
