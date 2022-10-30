@@ -3,6 +3,7 @@ using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain;
 using Domain.DTOs;
+using Shared.Dtos;
 
 namespace Application.Logic;
 
@@ -53,5 +54,22 @@ public class UserLogic : IUserLogic
         };
 
         await userDao.UpdateAsync(updated);
+    }
+
+    public async Task<User> ValidateUser(UserLoginDto userLoginDto)
+    {
+        User? existingUser = await userDao.GetByUsernameAsync(userLoginDto.Username);
+
+        if (existingUser == null)
+        {
+            throw new Exception("User not found");
+        }
+
+        if (!existingUser.Password.Equals(userLoginDto.Password))
+        {
+            throw new Exception("Password mismatch");
+        }
+
+        return existingUser;
     }
 }

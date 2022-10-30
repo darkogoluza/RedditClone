@@ -1,3 +1,9 @@
-GET https://localhost:7207/SubForms
+POST https://localhost:7207/auth/login
+Content-Type: application/json
+
+{ "Username" : "Darko", "Password" : "123" }
 
 ###
+
+GET https://localhost:7207/test/authorized
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKV1RTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiIyYWFiOTBmYS1hOGNiLTQyNDEtYjEwYS05MmY3ZjdhMjZkZDYiLCJpYXQiOiIzMC8xMC8yMDIyIDExOjU0OjQxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6IkRhcmtvIiwiZXhwIjoxNjY3MTM0NDgxLCJpc3MiOiJKV1RBdXRoZW50aWNhdGlvblNlcnZlciIsImF1ZCI6IkpXVFNlcnZpY2VCbGF6b3JXYXNtQ2xpZW50In0.37UOGXOJ9M_i-BSKVyQ3Yo_Q1LmdJZe6wtQbljhWM8hhf_x0gKkt_-JZ_XDRSz5hr4lRHy042qo4WjyeKAjB9w

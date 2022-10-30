@@ -1,6 +1,7 @@
 ﻿using Application.DaoInterfaces;
 using Domain;
 using Domain.DTOs;
+using Shared.Dtos;
 
 namespace FileDataAccess.DAOs;
 
@@ -15,7 +16,7 @@ public class UserFileDao : IUserDao
     
     public Task<User> CreateAsync(UserCreationDto userCreationDto)
     {
-        User ToCraete = new User(userCreationDto.UserName, userCreationDto.Password);
+        User toCraete = new User(userCreationDto.UserName, userCreationDto.Password);
 
         int id = 0;
         if (context.Users.Any())
@@ -24,12 +25,12 @@ public class UserFileDao : IUserDao
             id = max + 1;
         }
 
-        ToCraete.Id = id;
+        toCraete.Id = id;
         
-        context.Users.Add(ToCraete);
+        context.Users.Add(toCraete);
         context.SaveChanges();
 
-        return Task.FromResult(ToCraete);
+        return Task.FromResult(toCraete);
     }
 
     public Task<IEnumerable<User>> GetAsync()
@@ -40,17 +41,17 @@ public class UserFileDao : IUserDao
 
     public Task<User?> GetByIdAsync(int id)
     {
-        User ToGet = null;
+        User toGet = null;
         foreach (var user in context.Users)
         {
             if (user.Id == id)
             {
-                ToGet = user;
+                toGet = user;
                 break;
             }
         }
 
-        return Task.FromResult(ToGet);
+        return Task.FromResult(toGet);
     }
 
     public Task DeleteAsync(int id)
@@ -82,5 +83,20 @@ public class UserFileDao : IUserDao
         }
 
         return Task.CompletedTask;
+    }
+
+    public Task<User?> GetByUsernameAsync(string Username)
+    {
+        User toGet = null;
+        foreach (var user in context.Users)
+        {
+            if (user.UserName ==  Username)
+            {
+                toGet = user;
+                break;
+            }
+        }
+
+        return Task.FromResult(toGet);
     }
 }

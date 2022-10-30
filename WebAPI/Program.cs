@@ -27,6 +27,7 @@ builder.Services.AddScoped<IPostLogic, PostLogic>();
 builder.Services.AddScoped<ICommentDao, CommentFileDao>();
 builder.Services.AddScoped<ICommentLogic, CommentLogic>();
 
+
 // added auth handling
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
