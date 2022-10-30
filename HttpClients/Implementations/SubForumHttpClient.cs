@@ -6,12 +6,12 @@ using HttpClients.ClientInterfaces;
 
 namespace HttpClients.Implementations;
 
-public class SubFormHttpClient : ISubFormService
+public class SubForumHttpClient : ISubForumService
 {
     
     private readonly HttpClient client;
 
-    public SubFormHttpClient(HttpClient client)
+    public SubForumHttpClient(HttpClient client)
     {
         this.client = client;
     }

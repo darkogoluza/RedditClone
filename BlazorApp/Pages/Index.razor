@@ -1,13 +1,13 @@
 ﻿@page "/"
 @using Domain
 @using HttpClients.ClientInterfaces
-@inject ISubFormService subFormService
+@inject ISubForumService subForumService
 @inject NavigationManager navMgr
 
 <PageTitle>Index</PageTitle>
 
 <div class="space-y-8">
-    <h1 class="text-5xl text-blue-500 focus:outline-none">Sub Forms</h1>
+    <h1 class="text-5xl text-blue-500 focus:outline-none">Sub Forums</h1>
 
     @if (subForums == null)
     {
@@ -15,14 +15,14 @@
     }
     else if (!subForums.Any())
     {
-        <p class="text-slate-500">There is no sub forms!</p>
+        <p class="text-slate-500">There is no sub forums!</p>
     }
     else
     {
         <ol>
-            @foreach (SubForum subForm in subForums)
+            @foreach (SubForum subForum in subForums)
             {
-                <p @onclick="@(() => navMgr.NavigateTo("/SubForm/?Type="+subForm.Type))" class="text-slate-900 hover:text-blue-500 cursor-pointer">r/@subForm.Type <span class="text-slate-600 text-sm">, created by: [@subForm.CreatedBy.UserName]</span></p>
+                <p @onclick="@(() => navMgr.NavigateTo("/SubForumView/?Type="+subForum.Type))" class="text-slate-900 hover:text-blue-500 cursor-pointer">r/@subForum.Type <span class="text-slate-600 text-sm">, created by: [@subForum.CreatedBy.UserName]</span></p>
             }
         </ol>
     }
@@ -35,7 +35,7 @@
     {
         try
         {
-            subForums = await subFormService.GetAsync();
+            subForums = await subForumService.GetAsync();
         }
         catch (Exception e)
         {

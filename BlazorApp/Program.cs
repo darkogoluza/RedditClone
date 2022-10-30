@@ -12,7 +12,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<IPostService, PostHttpClient>();
-builder.Services.AddScoped<ISubFormService, SubFormHttpClient>();
+builder.Services.AddScoped<ISubForumService, SubForumHttpClient>();
 builder.Services.AddScoped<ICommentService, CommentHttpClient>();
 builder.Services.AddScoped<IAuthService, AuthHttpClient>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();

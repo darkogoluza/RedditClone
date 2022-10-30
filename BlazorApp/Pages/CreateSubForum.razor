@@ -1,13 +1,13 @@
-﻿@page "/CreateSubForm"
+﻿@page "/CreateSubForum"
 @using HttpClients.ClientInterfaces
 @using System.Security.Claims
-@inject ISubFormService subFormService
+@inject ISubForumService subForumService
 @inject IAuthService authService
 @inject NavigationManager navMgr
 @attribute [Authorize]
 
 <div class="p-4 bg-slate-200 rounded-xl space-y-4 w-80">
-    <h3 class="text-2xl">Create sub form</h3>
+    <h3 class="text-2xl">Create sub forum</h3>
     <div class="space-y-2">
         <div class="flex items-center justify-between">
             <label class="text-slate-800">Name:</label>
@@ -35,7 +35,7 @@
             ClaimsPrincipal context = await authService.GetAuthAsync();
             var claims = context.Identities.First().Claims.ToList();
             string? id = claims?.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-            await subFormService.CreateAsync(name, int.Parse(id));
+            await subForumService.CreateAsync(name, int.Parse(id));
             navMgr.NavigateTo("/");
         }
         catch (Exception e)

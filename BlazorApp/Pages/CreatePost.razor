@@ -3,7 +3,7 @@
 @using Domain
 @using HttpClients.ClientInterfaces
 @inject IAuthService authService
-@inject ISubFormService subFormService
+@inject ISubForumService subForumService
 @inject IPostService postService
 @inject NavigationManager navMgr
 @attribute [Authorize]
@@ -21,8 +21,8 @@
             <textarea class="rounded-md bg-slate-100 px-2 py-1 w-full h-64 resize-none"  @bind="body"></textarea>
         </div>
         <div class="flex items-start flex flex-col">
-            <label class="text-slate-800 text-left w-full">Assignee sub form:</label>
-            <select @bind="selectedSubFormId">
+            <label class="text-slate-800 text-left w-full">Assignee sub forum:</label>
+            <select @bind="selectedSubForumId">
                 @if (subForums != null)
                 {
                     @foreach (SubForum subForum in subForums)
@@ -50,7 +50,7 @@
     private string body;
     private string errorLabel;
 
-    private int selectedSubFormId;
+    private int selectedSubForumId;
 
     public IEnumerable<SubForum>? subForums;
 
@@ -58,7 +58,7 @@
     {
         try
         {
-            subForums = await subFormService.GetAsync();
+            subForums = await subForumService.GetAsync();
         }
         catch (Exception e)
         {
@@ -73,7 +73,7 @@
             ClaimsPrincipal context = await authService.GetAuthAsync();
             var claims = context.Identities.First().Claims.ToList();
             string? id = claims?.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
-            await postService.CreateAsync(title, body, selectedSubFormId, int.Parse(id));
+            await postService.CreateAsync(title, body, selectedSubForumId, int.Parse(id));
             navMgr.NavigateTo("/");
         }
         catch (Exception e)
