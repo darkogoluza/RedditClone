@@ -1,7 +1,86 @@
 ﻿@page "/CreatePost"
+@using System.Security.Claims
+@using Domain
+@using HttpClients.ClientInterfaces
+@inject IAuthService authService
+@inject ISubFormService subFormService
+@inject IPostService postService
+@inject NavigationManager navMgr
+@attribute [Authorize]
 
-    <h3>CreatePost</h3>
+<div class="p-4 bg-slate-200 rounded-xl space-y-4 w-96">
+    <h3 class="text-2xl">Create a post</h3>
+
+    <div class="space-y-2">
+        <div class="flex items-start flex flex-col">
+            <label class="text-slate-800 text-left w-full">Title:</label>
+            <input class="rounded-md bg-slate-100 px-2 py-1 w-full" type="text" @bind="title"/>
+        </div>
+        <div class="flex items-start flex flex-col">
+            <label class="text-slate-800 text-left w-full">Body:</label>
+            <textarea class="rounded-md bg-slate-100 px-2 py-1 w-full h-64 resize-none"  @bind="body"></textarea>
+        </div>
+        <div class="flex items-start flex flex-col">
+            <label class="text-slate-800 text-left w-full">Assignee sub form:</label>
+            <select @bind="selectedSubFormId">
+                @if (subForums != null)
+                {
+                    @foreach (SubForum subForum in subForums)
+                    {
+                        <option value="@subForum.Id">@subForum.Type</option>
+                    }
+                }
+            </select>
+        </div>
+
+    </div>
+
+    @if (!string.IsNullOrEmpty(errorLabel))
+    {
+        <p class="text-red-500">
+            @errorLabel
+        </p>
+    }
+
+    <button class="px-4 py-2 bg-blue-500 text-blue-100 rounded-xl hover:bg-blue-400" @onclick="Create">Create</button>
+</div>
 
 @code {
-    
+    private string title;
+    private string body;
+    private string errorLabel;
+
+    private int selectedSubFormId;
+
+    public IEnumerable<SubForum>? subForums;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            subForums = await subFormService.GetAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    private async Task Create()
+    {
+        try
+        {
+            ClaimsPrincipal context = await authService.GetAuthAsync();
+            var claims = context.Identities.First().Claims.ToList();
+            string? id = claims?.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value;
+            await postService.CreateAsync(title, body, selectedSubFormId, int.Parse(id));
+            navMgr.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            errorLabel = $"Error: {e.Message}";
+        }
+    }
+
 }

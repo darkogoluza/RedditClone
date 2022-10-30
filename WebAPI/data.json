@@ -9,6 +9,11 @@
       "Id": 1,
       "UserName": "Mirko",
       "Password": "123"
+    },
+    {
+      "Id": 2,
+      "UserName": "Filip",
+      "Password": "4321"
     }
   ],
   "SubForums": [
@@ -29,6 +34,24 @@
         "Password": "123"
       },
       "Type": "Dogs"
+    },
+    {
+      "Id": 2,
+      "CreatedBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "Type": "Cars"
+    },
+    {
+      "Id": 3,
+      "CreatedBy": {
+        "Id": 2,
+        "UserName": "Filip",
+        "Password": "4321"
+      },
+      "Type": "Test"
     }
   ],
   "Posts": [
@@ -126,6 +149,63 @@
       },
       "Title": "Announcement: \u0027Name my cat/kitten\u0027 submissions now require verification",
       "Body": "Those of you who frequent \u0027new\u0027 on r/cats will remember the t-shirt/poster/merch spam campaign that used to frequently end up in our feed - It was highly disruptive for our community, as well as for our mod team. Through tireless work, patience, and determination - I developed a bot, u/SpamBustr, which has completely eliminated their success on our sub, among many others to date."
+    },
+    {
+      "Id": 5,
+      "Owner": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "BelongsTo": {
+        "Id": 0,
+        "CreatedBy": {
+          "Id": 0,
+          "UserName": "Darko",
+          "Password": "123"
+        },
+        "Type": "Cats"
+      },
+      "Title": "My Cat",
+      "Body": "I love cats so much"
+    },
+    {
+      "Id": 6,
+      "Owner": {
+        "Id": 1,
+        "UserName": "Mirko",
+        "Password": "123"
+      },
+      "BelongsTo": {
+        "Id": 2,
+        "CreatedBy": {
+          "Id": 0,
+          "UserName": "Darko",
+          "Password": "123"
+        },
+        "Type": "Cars"
+      },
+      "Title": "My Car",
+      "Body": "I love my car so much!"
+    },
+    {
+      "Id": 7,
+      "Owner": {
+        "Id": 2,
+        "UserName": "Filip",
+        "Password": "4321"
+      },
+      "BelongsTo": {
+        "Id": 1,
+        "CreatedBy": {
+          "Id": 1,
+          "UserName": "Mirko",
+          "Password": "123"
+        },
+        "Type": "Dogs"
+      },
+      "Title": "I love Dogs",
+      "Body": "Hey there, my name is Filip and I love dogs :)"
     }
   ],
   "Comments": [

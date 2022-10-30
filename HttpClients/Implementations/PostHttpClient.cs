@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using Domain;
+using Domain.DTOs;
 using HttpClients.ClientInterfaces;
 
 namespace HttpClients.Implementations;
@@ -45,5 +47,21 @@ public class PostHttpClient : IPostService
         });
 
         return post;
+    }
+
+    public async Task CreateAsync(string title, string body, int selectedSubFormId, int ownerId)
+    {
+        PostCreationDto postCreationDto = new(title, body, selectedSubFormId, ownerId);
+
+        string subFormAsJson = JsonSerializer.Serialize(postCreationDto);
+        StringContent content = new(subFormAsJson, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await client.PostAsync("https://localhost:7207/Posts", content);
+        string responseContent = await response.Content.ReadAsStringAsync();
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(responseContent);
+        }
     }
 }

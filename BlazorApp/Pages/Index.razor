@@ -22,7 +22,7 @@
         <ol>
             @foreach (SubForum subForm in subForums)
             {
-                <p @onclick="@(() => navMgr.NavigateTo("/SubForm/?Type="+subForm.Type))" class="text-slate-900 hover:text-blue-500 cursor-pointer">r/@subForm.Type, created by: [@subForm.CreatedBy.UserName]</p>
+                <p @onclick="@(() => navMgr.NavigateTo("/SubForm/?Type="+subForm.Type))" class="text-slate-900 hover:text-blue-500 cursor-pointer">r/@subForm.Type <span class="text-slate-600 text-sm">, created by: [@subForm.CreatedBy.UserName]</span></p>
             }
         </ol>
     }

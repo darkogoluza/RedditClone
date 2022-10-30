@@ -1,8 +1,52 @@
 ﻿@page "/Register"
+@using HttpClients.ClientInterfaces
+@using Domain
+@using Domain.DTOs
+@inject IAuthService authService
+@inject NavigationManager navMgr
 
-    <h3>Register</h3>
+<div class="p-4 bg-slate-200 rounded-xl space-y-4 w-80">
+    <h3 class="text-2xl">Register</h3>
+    <div class="space-y-2">
+        <div class="flex items-center justify-between">
+            <label class="text-slate-800">User name:</label>
+            <input class="rounded-md bg-slate-100 px-2 py-1" type="text" @bind="userName"/>
+        </div>
+        <div class="flex items-center justify-between">
+            <label class="text-slate-800" style="text-align: center">Password:</label>
+            <input class="rounded-md bg-slate-100 px-2 py-1" type="password" @bind="password"/>
+        </div>
+    </div>
+    @if (!string.IsNullOrEmpty(errorLabel))
+    {
+        <p class="text-red-500">
+            @errorLabel
+        </p>
+    }
+
+    <button class="px-4 py-2 bg-blue-500 text-blue-100 rounded-xl hover:bg-blue-400" @onclick="RegisterAsync">Register</button>
+</div>
 
 
 @code {
-    
+    private string userName = "";
+    private string password = "";
+    private string errorLabel;
+
+    private async Task RegisterAsync()
+    {
+        errorLabel = "";
+        try
+        {
+            UserCreationDto userCreationDto = new(userName, password);
+            await authService.RegisterAsync(userCreationDto);
+            await authService.LoginAsync(userName, password);
+            navMgr.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            errorLabel = $"Error: {e.Message}";
+        }
+    }
 }

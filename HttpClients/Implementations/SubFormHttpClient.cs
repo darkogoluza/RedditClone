@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using Domain;
+using Domain.DTOs;
 using HttpClients.ClientInterfaces;
 
 namespace HttpClients.Implementations;
@@ -29,5 +31,21 @@ public class SubFormHttpClient : ISubFormService
         });
 
         return subForums;
+    }
+
+    public async Task CreateAsync(string name, int id)
+    {
+        SubForumCreationDto subForumCreationDto = new(name, id);
+
+        string subFormAsJson = JsonSerializer.Serialize(subForumCreationDto);
+        StringContent content = new(subFormAsJson, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await client.PostAsync("https://localhost:7207/SubForms", content);
+        string responseContent = await response.Content.ReadAsStringAsync();
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(responseContent);
+        }
     }
 }

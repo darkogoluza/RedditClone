@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using Domain;
+using Domain.DTOs;
 using HttpClients.ClientInterfaces;
 using Shared.Dtos;
 
@@ -52,9 +53,17 @@ public class AuthHttpClient : IAuthService
         return Task.CompletedTask;
     }
 
-    public Task RegisterAsync(User user)
+    public async Task RegisterAsync(UserCreationDto userCreationDto)
     {
-        throw new NotImplementedException();
+        string userAsJson = JsonSerializer.Serialize(userCreationDto);
+        StringContent content = new(userAsJson, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await client.PostAsync("https://localhost:7207/Users", content);
+        string responseContent = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(responseContent);
+        }
     }
 
     public Task<ClaimsPrincipal> GetAuthAsync()
