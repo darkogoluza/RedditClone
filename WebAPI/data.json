@@ -52,6 +52,15 @@
         "Password": "4321"
       },
       "Type": "Test"
+    },
+    {
+      "Id": 4,
+      "CreatedBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "Type": "Sep stuff"
     }
   ],
   "Posts": [
@@ -206,6 +215,25 @@
       },
       "Title": "I love Dogs",
       "Body": "Hey there, my name is Filip and I love dogs :)"
+    },
+    {
+      "Id": 8,
+      "Owner": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "BelongsTo": {
+        "Id": 4,
+        "CreatedBy": {
+          "Id": 0,
+          "UserName": "Darko",
+          "Password": "123"
+        },
+        "Type": "Sep stuff"
+      },
+      "Title": "I love sep",
+      "Body": "Some shit about loveing sep"
     }
   ],
   "Comments": [
@@ -329,6 +357,72 @@
       "PostedOn": 0,
       "Body": "Wtf man?",
       "ParentCommentId": 10
+    },
+    {
+      "Id": 12,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 8,
+      "Body": "Some coment",
+      "ParentCommentId": null
+    },
+    {
+      "Id": 13,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 8,
+      "Body": "other comment",
+      "ParentCommentId": null
+    },
+    {
+      "Id": 14,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 8,
+      "Body": "look toni",
+      "ParentCommentId": 12
+    },
+    {
+      "Id": 15,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 0,
+      "Body": "what now?",
+      "ParentCommentId": 14
+    },
+    {
+      "Id": 16,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 8,
+      "Body": "you bitch",
+      "ParentCommentId": 12
+    },
+    {
+      "Id": 17,
+      "WrittenBy": {
+        "Id": 0,
+        "UserName": "Darko",
+        "Password": "123"
+      },
+      "PostedOn": 8,
+      "Body": "stfup toni",
+      "ParentCommentId": 12
     }
   ]
 }

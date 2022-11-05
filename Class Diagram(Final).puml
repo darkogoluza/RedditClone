@@ -1,0 +1,532 @@
+﻿@startuml
+!theme toy
+
+skinparam ranksep 100
+skinparam nodesep 100
+skinparam groupInheritance 2
+top to bottom direction
+
+package Domain #E6E6E6 {
+    package DTOs #FFCCCC {
+
+        class CommentCreationDto #FFFFFF {
+            + CommentCreationDto(ownerId:int, postId:int, body:string, commentParentId:int?)
+            + OwnerId : int <<get>>
+            + PostId : int <<get>>
+            + Body : string <<get>>
+            + CommentParentId : int? <<get>>
+        }
+        class CommentUpdateDto #FFFFFF {
+            + CommentUpdateDto(ownerId:int?, postId:int?, body:string?, id:int, commentParentId:int?)
+            + OwnerId : int? <<get>>
+            + PostId : int? <<get>>
+            + Body : string? <<get>>
+            + Id : int <<get>>
+            + CommentParentId : int? <<get>>
+        }
+        class PostCreationDto #FFFFFF {
+            + PostCreationDto(title:string, body:string, belongsToId:int, ownerId:int)
+            + Title : string <<get>>
+            + Body : string <<get>>
+            + BelongsToId : int <<get>>
+            + OwnerId : int <<get>>
+        }
+        class PostUpdateDto #FFFFFF {
+            + PostUpdateDto(belongsToId:int?, ownerId:int?, id:int, title:string?, body:string?)
+            + BelongsToId : int? <<get>>
+            + OwnerId : int? <<get>>
+            + Id : int <<get>>
+            + Title : string? <<get>>
+            + Body : string? <<get>>
+        }
+        class SubForumCreationDto #FFFFFF {
+            + SubForumCreationDto(type:string, creatorId:int)
+            + Type : string <<get>> <<set>>
+            + CreatorId : int <<get>> <<set>>
+        }
+        class SubForumUpdateDto #FFFFFF {
+            + SubForumUpdateDto(id:int, type:string)
+            + Id : int <<get>>
+            + Type : string <<get>>
+        }
+        class UserCreationDto #FFFFFF {
+            + UserCreationDto(userName:string, password:string)
+            + UserName : string <<get>>
+            + Password : string <<get>>
+        }
+        class UserLoginDto #FFFFFF {
+            + Username : string <<get>> <<init>>
+            + Password : string <<get>> <<init>>
+        }
+        class UserUpdateDto #FFFFFF {
+            + UserUpdateDto(username:string?, password:string?, id:int)
+            + Username : string? <<get>>
+            + Password : string? <<get>>
+            + Id : int <<get>>
+        }
+    }
+    
+    class Comment #FFFFFF {
+        + Id : int <<get>> <<set>>
+        + PostedOn : int <<get>>
+        + Body : string <<get>> <<set>>
+        + ParentCommentId : int? <<get>>
+        + Comment(writtenBy:User, postedOn:int, body:string, parentCommentId:int?)
+    }
+    class Post #FFFFFF {
+        + Id : int <<get>> <<set>>
+        + Title : string <<get>> <<set>>
+        + Body : string <<get>> <<set>>
+        + Post(owner:User, belongsTo:SubForum, title:string, body:string)
+    }
+    class SubForum #FFFFFF {
+        + Id : int <<get>> <<set>>
+        + Type : string <<get>>
+        + SubForum(createdBy:User, type:string)
+    }
+    class User #FFFFFF {
+        + Id : int <<get>> <<set>>
+        + UserName : string <<get>> <<set>>
+        + Password : string <<get>> <<set>>
+        + User(userName:string, password:string)
+    }
+    
+    Comment --> "WrittenBy" User
+    Post --> "Owner" User
+    Post --> "BelongsTo" SubForum
+    SubForum --> "CreatedBy" User
+}
+
+package Application #E6E6E6 {
+    package LogicInterfaces #FFCCCC {
+        class CommentLogic #FFFFFF {
+            + CommentLogic(commentDao:ICommentDao, userDao:IUserDao, postDao:IPostDao)
+            + <<async>> CreateAsync(creationDto:CommentCreationDto) : Task<Comment>
+            + <<async>> GetAsync(postId:int?) : Task<IEnumerable<Comment>>
+            + <<async>> GetByIdAsync(id:int) : Task<Comment?>
+            + <<async>> UpdateAsync(commentUpdateDto:CommentUpdateDto) : Task
+            + <<async>> DeleteAsync(id:int) : Task
+            + <<async>> GetSubCommentsAsync(id:int) : Task<IEnumerable<Comment>>
+        }
+        class PostLogic #FFFFFF {
+            + PostLogic(postDao:IPostDao, subForumDao:ISubForumDao, userDao:IUserDao)
+            + <<async>> CreateAsync(postCreationDto:PostCreationDto) : Task<Post>
+            + <<async>> GetAsync(subForm:string?) : Task<IEnumerable<Post>>
+            + <<async>> GetByIdAsync(id:int) : Task<Post?>
+            + <<async>> UpdateAsync(postUpdateDto:PostUpdateDto) : Task
+            + <<async>> DeleteAsync(id:int) : Task
+        }
+        class SubForumLogic #FFFFFF {
+            + SubForumLogic(subForumDao:ISubForumDao, userDao:IUserDao)
+            + <<async>> CreateAsync(subForumCreationDto:SubForumCreationDto) : Task<SubForum>
+            + <<async>>  
+            + <<async>> DeleteAsync(id:int) : Task
+            + <<async>> UpdateAsync(subForumUpdateDto:SubForumUpdateDto) : Task
+        }
+        class UserLogic #FFFFFF {
+            + UserLogic(userDao:IUserDao)
+            + <<async>> GetAsync() : Task<IEnumerable<User>>
+            + <<async>> CreateAsync(userCreationDto:UserCreationDto) : Task<User>
+            + <<async>> DeleteAsync(id:int) : Task
+            + <<async>> UpdateAsync(updateDto:UserUpdateDto) : Task
+            + <<async>> ValidateUser(userLoginDto:UserLoginDto) : Task<User>
+        }
+    }
+    
+    package Logic #FFCCCC {
+        interface ICommentLogic #FFFFCC {
+            CreateAsync(creationDto:CommentCreationDto) : Task<Comment>
+            GetAsync(postId:int?) : Task<IEnumerable<Comment>>
+            GetByIdAsync(id:int) : Task<Comment?>
+            UpdateAsync(commentUpdateDto:CommentUpdateDto) : Task
+            DeleteAsync(id:int) : Task
+            GetSubCommentsAsync(id:int) : Task<IEnumerable<Comment>>
+        }
+        interface IPostLogic #FFFFCC {
+            CreateAsync(postCreationDto:PostCreationDto) : Task<Post>
+            GetAsync(subForm:string?) : Task<IEnumerable<Post>>
+            GetByIdAsync(id:int) : Task<Post?>
+            UpdateAsync(postUpdateDto:PostUpdateDto) : Task
+            DeleteAsync(id:int) : Task
+        }
+        interface ISubForumLogic #FFFFCC {
+            CreateAsync(subForumCreationDto:SubForumCreationDto) : Task<SubForum>
+            GetAsync() : Task<IEnumerable<SubForum>>
+            DeleteAsync(id:int) : Task
+            UpdateAsync(subForumUpdateDto:SubForumUpdateDto) : Task
+        }
+        interface IUserLogic #FFFFCC {
+            GetAsync() : Task<IEnumerable<User>>
+            CreateAsync(userCreationDto:UserCreationDto) : Task<User>
+            DeleteAsync(id:int) : Task
+            UpdateAsync(updateDto:UserUpdateDto) : Task
+            ValidateUser(userLoginDto:UserLoginDto) : Task<User>
+        }
+    }
+    
+    ICommentLogic <|.. CommentLogic
+    IPostLogic <|.. PostLogic
+    ISubForumLogic <|.. SubForumLogic
+    IUserLogic <|.. UserLogic
+}
+
+
+package DaoInterfaces #FFCCCC {
+        interface ICommentDao #FFFFCC {
+            CreateAsync(comment:Comment) : Task<Comment>
+            GetAsync(postId:int?) : Task<IEnumerable<Comment>>
+            GetByIdAsync(id:int) : Task<Comment?>
+            UpdateAsync(updated:Comment) : Task
+            DeleteAsync(id:int) : Task
+            GetSubCommentsAsync(id:int) : Task<IEnumerable<Comment>>
+        }
+        interface IPostDao #FFFFCC {
+            CreateAsync(post:Post) : Task<Post>
+            GetAsync(subForm:string?) : Task<IEnumerable<Post>>
+            GetByIdAsync(id:int) : Task<Post?>
+            DeleteAsync(id:int) : Task
+            UpdateAsync(updated:Post) : Task
+        }
+        interface ISubForumDao #FFFFCC {
+            CreateAsync(subForum:SubForum) : Task<SubForum>
+            GetAsync() : Task<IEnumerable<SubForum>>
+            DeleteAsync(id:int) : Task
+            GetByTypeAsync(type:string) : Task<SubForum?>
+            GetByIdAsync(belongsToId:int) : Task<SubForum?>
+            UpdateAsync(updated:SubForum) : Task
+        }
+        interface IUserDao #FFFFCC {
+            CreateAsync(userCreationDto:UserCreationDto) : Task<User>
+            GetAsync() : Task<IEnumerable<User>>
+            GetByIdAsync(id:int) : Task<User?>
+            DeleteAsync(id:int) : Task
+            UpdateAsync(updated:User) : Task
+            GetByUsernameAsync(Username:string) : Task<User?>
+        }
+    }
+
+package FileDataAccess #E6E6E6 {
+    package DAOs #FFCCCC {
+        class CommentFileDao #FFFFFF {
+            + CommentFileDao(context:FileContext)
+            + <<async>> CreateAsync(comment:Comment) : Task<Comment>
+            + GetAsync(postId:int?) : Task<IEnumerable<Comment>>
+            + GetSubCommentsAsync(id:int) : Task<IEnumerable<Comment>>
+            + GetByIdAsync(id:int) : Task<Comment?>
+            + UpdateAsync(updated:Comment) : Task
+            + DeleteAsync(id:int) : Task
+        }
+        class PostFileDao #FFFFFF {
+            + PostFileDao(context:FileContext)
+            + CreateAsync(post:Post) : Task<Post>
+            + GetAsync(subForm:string?) : Task<IEnumerable<Post>>
+            + GetByIdAsync(id:int) : Task<Post?>
+            + DeleteAsync(id:int) : Task
+            + UpdateAsync(updated:Post) : Task
+        }
+        class SubForumFileDao #FFFFFF {
+            + SubForumFileDao(context:FileContext)
+            + CreateAsync(subForum:SubForum) : Task<SubForum>
+            + GetAsync() : Task<IEnumerable<SubForum>>
+            + DeleteAsync(id:int) : Task
+            + GetByTypeAsync(type:string) : Task<SubForum?>
+            + GetByIdAsync(id:int) : Task<SubForum?>
+            + UpdateAsync(updated:SubForum) : Task
+        }
+        class UserFileDao #FFFFFF {
+            + UserFileDao(context:FileContext)
+            + CreateAsync(userCreationDto:UserCreationDto) : Task<User>
+            + GetAsync() : Task<IEnumerable<User>>
+            + GetByIdAsync(id:int) : Task<User?>
+            + DeleteAsync(id:int) : Task
+            + UpdateAsync(updated:User) : Task
+            + GetByUsernameAsync(Username:string) : Task<User?>
+        }
+    }
+    
+    class FileContext #FFFFFF {
+        - {static} filePath : string = "data.json"
+        + Users : ICollection<User> <<get>>
+        + SubForums : ICollection<SubForum> <<get>>
+        + Posts : ICollection<Post> <<get>>
+        + Comments : ICollection<Comment> <<get>>
+        - LoadData() : void
+        + SaveChanges() : void
+    }
+    
+    class DataContainer #FFFFFF {
+        + Users : ICollection<User> <<get>> <<set>>
+        + SubForums : ICollection<SubForum> <<get>> <<set>>
+        + Posts : ICollection<User> <<Post>> <<set>>
+        + Comments : ICollection<User> <<Comment>> <<set>>
+    
+    }
+    
+    PostFileDao --> "+ context" FileContext
+    CommentFileDao --> "+ context" FileContext
+    SubForumFileDao --> "+ context" FileContext
+    UserFileDao --> "+ context" FileContext
+    
+    FileContext --> "- dataContainer?" DataContainer
+    
+    IUserDao <|.. UserFileDao
+    ICommentDao <|.. CommentFileDao
+    IPostDao <|.. PostFileDao
+    ISubForumDao <|.. SubForumFileDao
+}
+
+package WebAPI #E6E6E6 {
+    package Controllers #FFCCCC {
+        class AuthController #FFFFFF {
+            - config : IConfiguration
+            + AuthController(config:IConfiguration, authService:IUserLogic)
+            + <<async>> Login(userLoginDto:UserLoginDto) : Task<ActionResult>
+        }
+        class CommentsController #FFFFFF {
+            + CommentsController(commentLogic:ICommentLogic)
+            + <<async>> CreateAsync(creationDto:CommentCreationDto) : Task<ActionResult<Comment>>
+            + <<async>> GetAsync(postId:int?) : Task<ActionResult<IEnumerable<Comment>>>
+            + <<async>> GetSubCommentsAsync(id:int) : Task<ActionResult<IEnumerable<Comment>>>
+            + <<async>> GetByIdAsync(id:int) : Task<ActionResult<Comment>>
+            + <<async>> UpdateAsync(commentUpdateDto:CommentUpdateDto) : Task<ActionResult>
+            + <<async>> DeleteAsync(id:int) : Task<ActionResult>
+        }
+        class PostsController #FFFFFF {
+            + PostsController(postLogic:IPostLogic)
+            + <<async>> CreateAsync(postCreationDto:PostCreationDto) : Task<ActionResult<Post>>
+            + <<async>> GetAsync(subForm:string?) : Task<ActionResult<IEnumerable<Post>>>
+            + <<async>> GetByIdAsync(id:int) : Task<ActionResult<Post?>>
+            + <<async>> PatchAsync(postUpdateDto:PostUpdateDto) : Task<ActionResult>
+            + <<async>> DeleteAsync(id:int) : Task<ActionResult>
+        }
+        class SubFormsController #FFFFFF {
+            + SubFormsController(subForumLogic:ISubForumLogic)
+            + <<async>> CreateAsync(subForumCreationDto:SubForumCreationDto) : Task<ActionResult<SubForum>>
+            + <<async>> GetAsync() : Task<ActionResult<IEnumerable<SubForum>>>
+            + <<async>> UpdateAsync(subForumUpdateDto:SubForumUpdateDto) : Task<ActionResult>
+            + <<async>> DeleteAsync(id:int) : Task<ActionResult>
+        }
+        class TestController #FFFFFF {
+            + GetAsAuthorized() : ActionResult
+        }
+        class UsersController #FFFFFF {
+            + UsersController(userLogic:IUserLogic)
+            + <<async>> CreateAsync(userCreationDto:UserCreationDto) : Task<ActionResult<User>>
+            + <<async>> GetAsync() : Task<ActionResult<IEnumerable<User>>>
+            + <<async>> UpdateAsync(updateDto:UserUpdateDto) : Task<ActionResult>
+            + <<async>> DeleteAsync(id:int) : Task<ActionResult>
+        }
+        
+         interface ControllerBase #FFFFCC {}
+        
+        ControllerBase <|-- UsersController
+        ControllerBase <|-- SubFormsController
+        ControllerBase <|-- TestController
+        ControllerBase <|-- PostsController
+        ControllerBase <|-- CommentsController
+        ControllerBase <|-- AuthController
+        
+       
+        
+        UsersController --> "- userLogic" IUserLogic
+        SubFormsController --> "- subForumLogic" ISubForumLogic
+        PostsController --> "- postLogic" IPostLogic
+        CommentsController --> "- commentLogic" ICommentLogic
+        AuthController --> "- authService" IUserLogic
+    }
+}
+
+package BlazorApp #E6E6E6 {
+
+    package Shared #FFCCCC {
+        class Header <<comp>> #FFFFFF {
+        
+        }
+        
+        class Layout <<comp>> #FFFFFF {
+                
+        }
+    }
+    
+    package Pages #FFCCCC {
+        package UIComponents #CCFFFF  {
+            class PostCard <<comp>> #FFFFFF  {
+                + Post : Post { get; set; }
+            }
+            
+            class SingleComment <<comp>> #FFFFFF {
+                    + Comment : Comment { get; set; }          
+                    public PostId : int { get; set; }  
+                    - subComments : ICollection<Comment>
+                    - commentInput : bool = false
+                    - commentInputText : string = ""
+                    
+                    - PublishAsync() : void
+                    - LoadAsync() : Task
+                    # OnInitializedAsync() : Task
+            }          
+        }
+        
+        class CreatePost <<page>> #FFFFFF {
+           - title : string
+           - body : string
+           - errorLabel : string
+            - selectedSubForumId : int
+            + subForums : IEnumerable<SubForum>?
+                    
+            # OnInitializedAsync() : Task
+            - CreateAsync() : Task
+        }
+        
+        class CreateSubForum <<page>> #FFFFFF {
+             - name : string
+             - errorLabel : string
+             
+             - CreateAsync() : Task
+        }
+        
+        class Index <<page>> #FFFFFF {
+            + subForum : IEnumerable<SubForum>?
+            # OnInitializedAsync() : Task
+        }
+        
+        class LogInOut <<page>> #FFFFFF {
+            - userName : string = ""
+            - password : string = ""
+            - errorLabel : string
+            
+            - LoginAsync() : Task
+            - LogoutAsync() : Task
+        }
+        
+        class Register <<page>> #FFFFFF {
+             - userName : string = ""
+             - password : string = ""
+             - errorLabel : string
+             
+             - RegisterAsync() : Task
+        }
+        
+        class SubForumView <<page>> #FFFFFF {
+            + Type : string? { get; set; }
+            - posts : IEnumerable<Post>?
+            # OnInitializedAsync() : Task
+        }
+        
+        class ViewSinglePost <<page>> #FFFFFF {
+            + Id : int { get; set; }
+            -  post : Post?
+            - comments : ICollection<Comment>
+            - commentInputText : string  = ""
+            
+            - PublishAsync() : Task
+            # OnInitializedAsync() : Task
+        }
+    }
+}
+
+package HttpClients #E6E6E6 {
+
+    package ClientInterfaces #FFCCCC {
+        interface IAuthService #FFFFCC {
+            + LoginAsync(username:string, password:string) : Task
+            + LogoutAsync() : Task
+            + RegisterAsync(userCreationDto:UserCreationDto) : Task
+            + GetAuthAsync() : Task<ClaimsPrincipal>
+        }
+        
+        interface ICommentService #FFFFCC {
+            GetAllCommentsFromAPostAsync(id:int) : Task<ICollection<Comment>>
+            GetAllSubCommentsAsync(commentId:int) : Task<ICollection<Comment>>
+            PublishAsync(body:string, ownerId:int, commentId:int?, postId:int) : Task
+        }
+        interface IPostService #FFFFCC {
+            GetAsync(type:string?) : Task<IEnumerable<Post>?>
+            GetByIdAsync(id:int) : Task<Post?>
+            CreateAsync(title:string, body:string, selectedSubFormId:int, ownerId:int) : Task
+        }
+        interface ISubForumService #FFFFCC {
+            GetAsync() : Task<ICollection<SubForum>>
+            CreateAsync(name:string, id:int) : Task
+        }
+    }
+    
+    package Implementations #FFCCCC {
+        class AuthHttpClient #FFFFFF {
+            - client : HttpClient
+            + {static} Jwt : string? <<get>> = ""
+            + OnAuthStateChange : Action<ClaimsPrincipal> <<get>> <<set>>
+            + <<async>> LoginAsync(username:string, password:string) : Task
+            + LogoutAsync() : Task
+            + <<async>> RegisterAsync(userCreationDto:UserCreationDto) : Task
+            + GetAuthAsync() : Task<ClaimsPrincipal>
+            - {static} CreateClaimsPrincipal () : ClaimsPrincipal
+            - {static} ParseClaimsFromJwt (jwt : string) : ClaimsPrincipal
+            - {static} ParseBase63WithoutPadding (base64 : string) : byte[]
+        }
+        
+        class CommentHttpClient #FFFFFF {
+            - client : HttpClient
+            + CommentHttpClient(client:HttpClient)
+            + <<async>> GetAllCommentsFromAPostAsync(id:int) : Task<ICollection<Comment>>
+            + <<async>> GetAllSubCommentsAsync(commentId:int) : Task<ICollection<Comment>>
+            + <<async>> PublishAsync(body:string, ownerId:int, commentId:int?, postId:int) : Task
+        }
+        class PostHttpClient #FFFFFF {
+            - client : HttpClient
+            + PostHttpClient(client:HttpClient)
+            + <<async>> GetAsync(type:string?) : Task<IEnumerable<Post>?>
+            + <<async>> GetByIdAsync(id:int) : Task<Post?>
+            + <<async>> CreateAsync(title:string, body:string, selectedSubFormId:int, ownerId:int) : Task
+        }
+        class SubForumHttpClient #FFFFFF {
+            - client : HttpClient
+            + SubForumHttpClient(client:HttpClient)
+            + <<async>> GetAsync() : Task<ICollection<SubForum>>
+            + <<async>> CreateAsync(name:string, id:int) : Task
+        }
+    }
+
+}
+
+ICommentService <|.. CommentHttpClient
+IPostService <|.. PostHttpClient
+ISubForumService <|.. SubForumHttpClient
+IAuthService <|.. AuthHttpClient
+
+BlazorApp .left.> HttpClients
+
+Layout --> Header
+CreatePost -down-> IAuthService
+CreatePost -down-> ISubForumService
+CreatePost -down-> IPostService
+
+CreateSubForum -down-> ISubForumService
+CreateSubForum -down-> IAuthService
+
+Index -down-> ISubForumService
+
+LogInOut -down-> IAuthService
+
+Register -down-> IAuthService
+
+SubForumView -down-> IPostService
+SubForumView --> PostCard
+
+ViewSinglePost -down-> IPostService
+ViewSinglePost -down-> ICommentService
+ViewSinglePost -down-> IAuthService
+ViewSinglePost -down-> SingleComment
+
+BlazorApp .down.> Domain
+
+
+Application .up.> Domain
+FileDataAccess .down.> Application
+WebAPI .down.> Application
+
+Application +-down-> DaoInterfaces
+
+Shared -[hidden]- Pages
+
+@enduml

@@ -21,14 +21,14 @@
         </p>
     }
 
-    <button class="px-4 py-2 bg-blue-500 text-blue-100 rounded-xl hover:bg-blue-400" @onclick="Create">Create</button>
+    <button class="px-4 py-2 bg-blue-500 text-blue-100 rounded-xl hover:bg-blue-400" @onclick="CreateAsync">Create</button>
 </div>
 
 @code {
     private string name;
     private string errorLabel;
 
-    private async Task Create()
+    private async Task CreateAsync()
     {
         try
         {
