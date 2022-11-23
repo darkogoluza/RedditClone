@@ -11,4 +11,11 @@ public class User
         UserName = userName;
         Password = password;
     }
+
+    private User(int id, string userName, string password)
+    {
+        Id = id;
+        UserName = userName;
+        Password = password;
+    }
 }

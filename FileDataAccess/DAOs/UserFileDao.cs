@@ -16,7 +16,7 @@ public class UserFileDao : IUserDao
     
     public Task<User> CreateAsync(UserCreationDto userCreationDto)
     {
-        User toCraete = new User(userCreationDto.UserName, userCreationDto.Password);
+        User toCreate = new User(userCreationDto.UserName, userCreationDto.Password);
 
         int id = 0;
         if (context.Users.Any())
@@ -25,12 +25,12 @@ public class UserFileDao : IUserDao
             id = max + 1;
         }
 
-        toCraete.Id = id;
+        toCreate.Id = id;
         
-        context.Users.Add(toCraete);
+        context.Users.Add(toCreate);
         context.SaveChanges();
 
-        return Task.FromResult(toCraete);
+        return Task.FromResult(toCreate);
     }
 
     public Task<IEnumerable<User>> GetAsync()

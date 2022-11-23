@@ -35,8 +35,8 @@ public class CommentFileDao : ICommentDao
 
         if (postId != null)
         {
-            comments = comments.Where(comment => comment.PostedOn == postId);
-            comments = comments.Where(comment => comment.ParentCommentId == null);
+            comments = comments.Where(comment => comment.PostedOn.Id == postId);
+            comments = comments.Where(comment => comment.ParentComment == null);
         }
         
         return Task.FromResult(comments);
@@ -45,11 +45,11 @@ public class CommentFileDao : ICommentDao
     public Task<IEnumerable<Comment>> GetSubCommentsAsync(int id)
     {
         IEnumerable<Comment> comments = context.Comments.AsEnumerable();
-        comments = comments.Where(comment => comment.ParentCommentId == id);
+        comments = comments.Where(comment => comment.ParentComment.Id == id);
         return Task.FromResult(comments);
     }
 
-    public Task<Comment?> GetByIdAsync(int id)
+    public Task<Comment?> GetByIdAsync(int? id)
     {
         Comment? toGet = null;
         foreach (var comment in context.Comments)

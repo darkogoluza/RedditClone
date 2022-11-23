@@ -15,4 +15,11 @@ public class Post
         Body = body;
         BelongsTo = belongsTo;
     }
+
+    private Post(int id, string title, string body)
+    {
+        Id = id;
+        Title = title;
+        Body = body;
+    }
 }

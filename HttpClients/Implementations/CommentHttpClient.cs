@@ -50,7 +50,7 @@ public class CommentHttpClient : ICommentService
 
     public async Task PublishAsync(string body, int ownerId, int? commentId, int postId)
     {
-        CommentCreationDto commentCreationDto = new(ownerId, postId,body, commentId);
+        CommentCreationDto commentCreationDto = new(ownerId, postId, body, commentId);
 
         string subFormAsJson = JsonSerializer.Serialize(commentCreationDto);
         StringContent content = new(subFormAsJson, Encoding.UTF8, "application/json");

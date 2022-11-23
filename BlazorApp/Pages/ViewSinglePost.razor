@@ -37,12 +37,11 @@ else
                 @foreach (var comment in comments)
                 {
                     <li>
-                        <SingleComment Comment="@comment" postId="@post.Id"/>
+                        <SingleComment Comment="@comment" PostId="@post.Id"/>
                     </li>
                 }
             </ol>
         }
-
     </article>
 }
 

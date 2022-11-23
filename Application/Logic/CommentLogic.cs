@@ -20,7 +20,7 @@ public class CommentLogic : ICommentLogic
 
     public async Task<Comment> CreateAsync(CommentCreationDto creationDto)
     {
-        Post? post = await postDao.GetByIdAsync(creationDto.PostId);
+        Post? post =  await postDao.GetByIdAsync(creationDto.PostId);
         if (post == null)
             throw new Exception($"Post with id {creationDto.PostId} does not exist");
 
@@ -28,14 +28,15 @@ public class CommentLogic : ICommentLogic
         if (user == null)
             throw new Exception($"User with id {creationDto.OwnerId} does not exist");
 
+        Comment? parentComment = null;
         if (creationDto.CommentParentId != null)
         {
-            Comment? parentComment = await commentDao.GetByIdAsync((int) creationDto.CommentParentId);
+            parentComment = await commentDao.GetByIdAsync(creationDto.CommentParentId);
             if (parentComment == null)
                 throw new Exception($"Parent comment with id {creationDto.CommentParentId} does not exist");
         }
 
-        Comment comment = new Comment(user, creationDto.PostId, creationDto.Body, creationDto.CommentParentId);
+        Comment comment = new Comment(user, post, creationDto.Body, parentComment);
 
         return await commentDao.CreateAsync(comment);
     }
@@ -63,7 +64,7 @@ public class CommentLogic : ICommentLogic
         Post? post = null;
         if (commentUpdateDto.PostId != null)
         {
-            post = await postDao.GetByIdAsync((int) commentUpdateDto.PostId);
+            post = await postDao.GetByIdAsync(commentUpdateDto.PostId);
             if (post == null)
                 throw new Exception($"Post with Id {commentUpdateDto.PostId} does not exist");
         }
@@ -75,18 +76,19 @@ public class CommentLogic : ICommentLogic
             if (user == null)
                 throw new Exception($"User with Id {commentUpdateDto.OwnerId} does not exist");
         }
-        
+
+        Comment? parentComment = null;
         if (commentUpdateDto.CommentParentId != null)
         {
-            Comment? parentComment = await commentDao.GetByIdAsync((int) commentUpdateDto.CommentParentId);
+            parentComment = await commentDao.GetByIdAsync(commentUpdateDto.CommentParentId);
             if (parentComment == null)
                 throw new Exception($"Parent comment with id {commentUpdateDto.CommentParentId} does not exist");
         }
 
         User userToUse = user ?? existing.WrittenBy;
-        int postIdToUse = commentUpdateDto.PostId ?? existing.PostedOn;
+        Post postIdToUse = post ?? existing.PostedOn;
         string bodyToUse = commentUpdateDto.Body ?? existing.Body;
-        int? parentIdToUse = commentUpdateDto.CommentParentId ?? existing.ParentCommentId;
+        Comment? parentIdToUse = parentComment ?? existing;
 
         Comment updated = new(userToUse, postIdToUse, bodyToUse, parentIdToUse)
         {

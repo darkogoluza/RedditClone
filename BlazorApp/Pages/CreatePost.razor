@@ -59,6 +59,7 @@
         try
         {
             subForums = await subForumService.GetAsync();
+            selectedSubForumId = subForums.First().Id;
         }
         catch (Exception e)
         {

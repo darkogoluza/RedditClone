@@ -8,7 +8,6 @@ top to bottom direction
 
 package Domain #E6E6E6 {
     package DTOs #FFCCCC {
-
         class CommentCreationDto #FFFFFF {
             + CommentCreationDto(ownerId:int, postId:int, body:string, commentParentId:int?)
             + OwnerId : int <<get>>
@@ -66,35 +65,50 @@ package Domain #E6E6E6 {
         }
     }
     
-    class Comment #FFFFFF {
-        + Id : int <<get>> <<set>>
-        + PostedOn : int <<get>>
-        + Body : string <<get>> <<set>>
-        + ParentCommentId : int? <<get>>
-        + Comment(writtenBy:User, postedOn:int, body:string, parentCommentId:int?)
-    }
-    class Post #FFFFFF {
-        + Id : int <<get>> <<set>>
-        + Title : string <<get>> <<set>>
-        + Body : string <<get>> <<set>>
-        + Post(owner:User, belongsTo:SubForum, title:string, body:string)
-    }
-    class SubForum #FFFFFF {
-        + Id : int <<get>> <<set>>
-        + Type : string <<get>>
-        + SubForum(createdBy:User, type:string)
-    }
     class User #FFFFFF {
         + Id : int <<get>> <<set>>
         + UserName : string <<get>> <<set>>
         + Password : string <<get>> <<set>>
+        
         + User(userName:string, password:string)
+        - User(id:int, userName:string, password:string)       
     }
     
-    Comment --> "WrittenBy" User
-    Post --> "Owner" User
-    Post --> "BelongsTo" SubForum
-    SubForum --> "CreatedBy" User
+     class SubForum #FFFFFF {
+        + Id : int <<get>> <<set>>
+        + Type : string <<get>> <<set>>
+        
+        + SubForum(createdBy:User, type:string)       
+        - SubForum(id:int, type:string)       
+     }
+      
+     class Post #FFFFFF {
+         + Id : int <<get>> <<set>>
+         + Title : string <<get>> <<set>>
+         + Body: string <<get>> <<set>>
+         
+         + Post(owner:User, belongsTo:SubForum, title:string, body:string)
+         - Post(id:int, title:string, body:string)
+     }
+     
+     class Comment #FFFFFF {
+        + Id:int <<get>> <<set>>
+        + Body:string <<get>> <<set>>
+        
+        + Comment(writtenBy:User, postedOn:Post, body:string, parentComment:Comment?)
+        - Comment(id:int, body:string)
+     }
+        
+    SubForum --> "+ CreatedBy <<get>> <<set>>" User
+    
+    Post --> "+ Owner <<get>> <<set>>" User
+    Post --> "+ BelongsTo <<get>> <<set>>" SubForum
+
+    Comment --> "+ WrittenBy <<get>> <<set>>" User
+    Comment --> "+ PostedOn <<get>> <<set>>" Post
+    Comment --> "+ ParentComment <<get>> <<set>>" Comment
+      
+
 }
 
 package Application #E6E6E6 {
@@ -205,10 +219,10 @@ package DaoInterfaces #FFCCCC {
         }
     }
 
-package FileDataAccess #E6E6E6 {
+package EfcDataAccess #E6E6E6 {
     package DAOs #FFCCCC {
-        class CommentFileDao #FFFFFF {
-            + CommentFileDao(context:FileContext)
+        class CommentEfcDao #FFFFFF {
+            + CommentEfcDao(context:RedditContext)
             + <<async>> CreateAsync(comment:Comment) : Task<Comment>
             + GetAsync(postId:int?) : Task<IEnumerable<Comment>>
             + GetSubCommentsAsync(id:int) : Task<IEnumerable<Comment>>
@@ -216,16 +230,16 @@ package FileDataAccess #E6E6E6 {
             + UpdateAsync(updated:Comment) : Task
             + DeleteAsync(id:int) : Task
         }
-        class PostFileDao #FFFFFF {
-            + PostFileDao(context:FileContext)
+        class PostEfcDao #FFFFFF {
+            + PostEfcDao(context:RedditContext)
             + CreateAsync(post:Post) : Task<Post>
             + GetAsync(subForm:string?) : Task<IEnumerable<Post>>
             + GetByIdAsync(id:int) : Task<Post?>
             + DeleteAsync(id:int) : Task
             + UpdateAsync(updated:Post) : Task
         }
-        class SubForumFileDao #FFFFFF {
-            + SubForumFileDao(context:FileContext)
+        class SubForumEfcDao #FFFFFF {
+            + SubForumEfcDao(context:RedditContext)
             + CreateAsync(subForum:SubForum) : Task<SubForum>
             + GetAsync() : Task<IEnumerable<SubForum>>
             + DeleteAsync(id:int) : Task
@@ -233,8 +247,8 @@ package FileDataAccess #E6E6E6 {
             + GetByIdAsync(id:int) : Task<SubForum?>
             + UpdateAsync(updated:SubForum) : Task
         }
-        class UserFileDao #FFFFFF {
-            + UserFileDao(context:FileContext)
+        class UserEfcDao #FFFFFF {
+            + UserEfcDao(context:RedditContext)
             + CreateAsync(userCreationDto:UserCreationDto) : Task<User>
             + GetAsync() : Task<IEnumerable<User>>
             + GetByIdAsync(id:int) : Task<User?>
@@ -244,35 +258,27 @@ package FileDataAccess #E6E6E6 {
         }
     }
     
-    class FileContext #FFFFFF {
-        - {static} filePath : string = "data.json"
-        + Users : ICollection<User> <<get>>
-        + SubForums : ICollection<SubForum> <<get>>
-        + Posts : ICollection<Post> <<get>>
-        + Comments : ICollection<Comment> <<get>>
-        - LoadData() : void
-        + SaveChanges() : void
+    class RedditContext #FFFFFF {
+        + Users : DbSet<User> <<get>> <<set>>
+        + SubForums : DbSet<SubForum>  <<get>> <<set>>
+        + Posts : DbSet<Posts> <<get>> <<set>>
+        + Comments : DbSet<Comments> <<get>> <<set>>
+        
+        # OnConfiguring(optionsBuilder : DbContextOptionsBuilder) : override void
+        # OnModelCreating(modelBuilder : ModelBuilder) : override void
     }
     
-    class DataContainer #FFFFFF {
-        + Users : ICollection<User> <<get>> <<set>>
-        + SubForums : ICollection<SubForum> <<get>> <<set>>
-        + Posts : ICollection<User> <<Post>> <<set>>
-        + Comments : ICollection<User> <<Comment>> <<set>>
+
     
-    }
-    
-    PostFileDao --> "+ context" FileContext
-    CommentFileDao --> "+ context" FileContext
-    SubForumFileDao --> "+ context" FileContext
-    UserFileDao --> "+ context" FileContext
-    
-    FileContext --> "- dataContainer?" DataContainer
-    
-    IUserDao <|.. UserFileDao
-    ICommentDao <|.. CommentFileDao
-    IPostDao <|.. PostFileDao
-    ISubForumDao <|.. SubForumFileDao
+    PostEfcDao --> "+ context" RedditContext
+    CommentEfcDao --> "+ context" RedditContext
+    SubForumEfcDao --> "+ context" RedditContext
+    UserEfcDao --> "+ context" RedditContext
+        
+    IUserDao <|.. UserEfcDao
+    ICommentDao <|.. CommentEfcDao
+    IPostDao <|.. PostEfcDao
+    ISubForumDao <|.. SubForumEfcDao
 }
 
 package WebAPI #E6E6E6 {

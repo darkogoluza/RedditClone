@@ -40,7 +40,7 @@ public class PostFileDao : IPostDao
         return Task.FromResult(posts);
     }
 
-    public Task<Post?> GetByIdAsync(int id)
+    public Task<Post?> GetByIdAsync(int? id)
     {
         Post? toGet = null;
         foreach (var post in context.Posts)

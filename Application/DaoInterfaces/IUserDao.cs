@@ -11,5 +11,5 @@ public interface IUserDao
     Task<User?> GetByIdAsync(int id);
     Task DeleteAsync(int id);
     Task UpdateAsync(User updated);
-    Task<User?> GetByUsernameAsync(string Username);
+    Task<User?> GetByUsernameAsync(string username);
 }

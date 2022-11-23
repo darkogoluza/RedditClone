@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{93BB0CA1-65B8-4747-ACA8-2B65861B83AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileDataAccess", "FileDataAccess\FileDataAccess.csproj", "{F8D0716B-5E73-4D92-904C-79D67DCC7FE6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{A6AC49E1-6B09-4AD4-986A-ABF78F8431BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp", "BlazorApp\BlazorApp.csproj", "{DA2CE250-1126-4771-B1CB-5585587084C3}"
@@ -13,6 +11,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpClients", "HttpClients\HttpClients.csproj", "{6BF00980-456E-426E-9E0D-7037CC3E0A6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{3E7BDD54-F0FD-419E-9EBB-FB8367612B36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfcDataAccess", "EfcDataAccess\EfcDataAccess.csproj", "{85799130-9F6F-4C00-AB7A-1028B070B0B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +28,6 @@ Global
 		{93BB0CA1-65B8-4747-ACA8-2B65861B83AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93BB0CA1-65B8-4747-ACA8-2B65861B83AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93BB0CA1-65B8-4747-ACA8-2B65861B83AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8D0716B-5E73-4D92-904C-79D67DCC7FE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8D0716B-5E73-4D92-904C-79D67DCC7FE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8D0716B-5E73-4D92-904C-79D67DCC7FE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8D0716B-5E73-4D92-904C-79D67DCC7FE6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6AC49E1-6B09-4AD4-986A-ABF78F8431BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6AC49E1-6B09-4AD4-986A-ABF78F8431BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6AC49E1-6B09-4AD4-986A-ABF78F8431BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,5 +44,9 @@ Global
 		{3E7BDD54-F0FD-419E-9EBB-FB8367612B36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E7BDD54-F0FD-419E-9EBB-FB8367612B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E7BDD54-F0FD-419E-9EBB-FB8367612B36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85799130-9F6F-4C00-AB7A-1028B070B0B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85799130-9F6F-4C00-AB7A-1028B070B0B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85799130-9F6F-4C00-AB7A-1028B070B0B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85799130-9F6F-4C00-AB7A-1028B070B0B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
